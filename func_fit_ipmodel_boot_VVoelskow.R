@@ -2,7 +2,7 @@
 ###     FUNCTION TO FIT FINAL POOLED LOGISTIC REGRESSION MODEL                ###
 #################################################################################
 
-fit.ipmodel.boot <- function(df.sw.d, sw.99.boot, event, p.final, V, output.path.tabs) {
+fit.ipmodel.boot <- function(df.sw.d, sw.99.boot, event, p.final, V) {
 
   ###     FIT POOLED LOGISTIC REGRESSION WITH TRUNCATED WEIGHTS
 
@@ -38,9 +38,6 @@ fit.ipmodel.boot <- function(df.sw.d, sw.99.boot, event, p.final, V, output.path
                    p.event0 = 0, p.event1 = 0, surv0 = 1, surv1 = 1,
                    risk0 = 0, risk1 = 0, t0 = 0)
   tab <- rbind(bl, tab.prep)
-  
-  ### Save table
-  write.csv(tab, file = output.path.tabs, row.names = FALSE)
   
   return(tab)
 }
