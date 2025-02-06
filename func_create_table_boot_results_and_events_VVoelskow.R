@@ -84,7 +84,7 @@ fun.tidy.boot.event.results <- function(filepath.boot, filepath.events, filepath
   
   ## Tidy number of events tables (number of events in censored dataset first)
   # Keep only number of events (not of non-events)
-  events.results <- events.results[2, ]
+  events.results <- events.results[2, 2:3]
   
   results.events <- cbind(events.results, nonunique.results)
   
@@ -92,10 +92,10 @@ fun.tidy.boot.event.results <- function(filepath.boot, filepath.events, filepath
   results.events.tidy <- results.events %>%
     rename(n.surv0 = '0',
            n.surv1 = '1') %>%
-    mutate(unique.surv0 = n.surv0-n_nonunique,
-           unique.surv1 = n.surv1-n_nonunique) %>%
+    mutate(unique.surv0 = n.surv0-n.nonunique,
+           unique.surv1 = n.surv1-n.nonunique) %>%
     select(-starts_with("event"),
-           -n_nonunique,
+           -n.nonunique,
            -helper
     ) %>%
     mutate(surv0.events.unique = paste0(n.surv0, " (", unique.surv0, ")")) %>%
