@@ -64,7 +64,7 @@
   num.boot <- 500
 
   ## Denominator
-  p.denom <- treat.trast ~ time + timesq + age + I(age^2) + mari.stat.cat + income.fam.cat + 
+  p.denom <- treat_trast ~ time + timesq + age + I(age^2) + mari.stat.cat + income.fam.cat + 
     menopausal.status + diag.dt.year + diag.tclass + diag.nclass + diag.er + diag.pr +
     op.grade + op.numtumours + I(op.numtumours^2) + op.sizetumour.cat +
     conf.cardio.drug + conf.cardio.drug.l1 + conf.cardio.mild + conf.cardio.mild.l1 +
@@ -75,7 +75,7 @@
     conf.visits.5yr.bl + I(conf.visits.5yr.bl^2)
 
   # Numerator
-  p.num <- treat.trast ~ time + timesq + age + I(age^2) + mari.stat.cat +
+  p.num <- treat_trast ~ time + timesq + age + I(age^2) + mari.stat.cat +
     income.fam.cat + menopausal.status + diag.dt.year + diag.tclass + diag.nclass +
     diag.er + diag.pr + op.grade + op.numtumours + I(op.numtumours^2) +
     op.sizetumour.cat + conf.visits.5yr.bl + I(conf.visits.5yr.bl^2)
@@ -146,8 +146,8 @@
 
 ## Structural
 # - lopnr: unique identifier for each individual
-# - treat.trast: indicator for whether an individual ever received trastuzumab
-# - c.treat.trast.l1: cumulative values of treat.trast lagged by one week
+# - treat_trast: indicator for whether an individual ever received trastuzumab
+# - cum_treat_trast_lag1: cumulative values of treat_trast lagged by one week
 # - event: binary indicator for event of interest
 # - arm: indicator of treatment arm to which an individual was assigned through cloning
 # - time: continuous variable for time
@@ -209,8 +209,8 @@
     Z = Z,
     p.denom = p.denom,
     p.num = p.num,
-    treat.col = "treat.trast",
-    cum.treat.lag.col = "c.treat.trast.l1"
+    treat.col = "treat_trast",
+    cum.treat.lag.col = "cum_treat_trast_lag1"
   )
 
 
@@ -258,8 +258,8 @@
     selected.lopnrs$blopnr <- 1:nrow(selected.lopnrs)
     
     # Keep data for individuals in the bootstrap sample
-    df.surv.boot <- left_join(selected.ids, df.surv, by = "id", relationship = "many-to-many")
-    df.boot <- left_join(selected.ids, df, by = "id", relationship = "many-to-many")
+    df.surv.boot <- left_join(selected.lopnrs, df.surv, by = "lopnr", relationship = "many-to-many")
+    df.boot <- left_join(selected.lopnrs, df, by = "lopnr", relationship = "many-to-many")
     
     # Estimate stabilized weights and truncate them
     weights.results <- estimate.stabilized.weights.99.boot(
@@ -270,8 +270,8 @@
       Z = Z,
       p.denom = p.denom,
       p.num = p.num,
-      treat.col = "treat.trast",
-      cum.treat.lag.col = "c.treat.trast.l1"
+      treat.col = "treat_trast",
+      cum.treat.lag.col = "cum_treat_trast_lag1"
     )
 
     # Fit pooled logistic regression and calculate survival and risks
@@ -280,8 +280,7 @@
       sw.99.boot = sw.99.boot,
       event = event,
       p.final = p.final,
-      V = V,
-      output.path.tabs = output.path.tabs)
+      V = V)
     
     # Add risk differences and risk ratios
     tab$rd <- tab$risk0 - tab$risk1
@@ -307,7 +306,7 @@
     num.iteration <- 0 # start at 1
     
     boot.results <- boot(
-      data = df.surv.ids,
+      data = df.surv.lopnrs,
       statistic = function(data, indices) {
         
         num.iteration <<- num.iteration + 1
