@@ -258,8 +258,8 @@
     selected.lopnrs$blopnr <- 1:nrow(selected.lopnrs)
     
     # Keep data for individuals in the bootstrap sample
-    df.surv.boot <- left_join(selected.lopnrs, df.surv, by = "lopnr", relationship = "many-to-many")
-    df.boot <- left_join(selected.lopnrs, df, by = "lopnr", relationship = "many-to-many")
+    df.surv.boot <- as.data.table(left_join(selected.lopnrs, df.surv, by = "lopnr", relationship = "many-to-many"))
+    df.boot <- as.data.table(left_join(selected.lopnrs, df, by = "lopnr", relationship = "many-to-many"))
     
     # Estimate stabilized weights and truncate them
     weights.results <- estimate.stabilized.weights.99.boot(
