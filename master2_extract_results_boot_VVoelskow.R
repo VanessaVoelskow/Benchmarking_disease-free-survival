@@ -110,15 +110,15 @@ setwd("C:/Users/voelskov/OneDrive - Charité - Universitätsmedizin Berlin/Dokum
 #################################################
 
   # Save final table for manuscript (dfs and single components)
-  write.xlsx(table.results.main, file = output.path.results.all.events.tab)
+  write.xlsx(get(paste0("table.results.", analysis)), file = output.path.results.all.events.tab)
 
   # Save final table for manuscript (death from breast cancer)
-  write.xlsx(results.bc.mortality.main, file = output.path.results.bc.mortality.tab)
+  write.xlsx(get(paste0("results.bc.mortality.", analysis)), file = output.path.results.bc.mortality.tab)
            
            
 
 # Remove objects that are not needed for plotting
-rm(table.results.main, results.bc.mortality.main, term)
+rm(table.results.final, results.bc.mortality.main, term)
 
 
 
